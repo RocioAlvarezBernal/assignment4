@@ -21,12 +21,16 @@ public class BankAccount {
 //	double futureValue;
 //	double accountTotal;
 	long accountNumber;
+	public static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	
 //
 //	public BankAccount(double balance, double interestRate) {
 //		this.balance = balance;
 //		this.interestRate = interestRate;
 //	}
 ////	
+	
+//========================BANK ACCOUNT CONSTRUCTORS===================================
 	public BankAccount(double balance, double interestRate) {
 		this.balance = balance;
 	    this.interestRate = interestRate;
@@ -134,7 +138,7 @@ public class BankAccount {
 	String writeToString() {
 		StringBuilder accountData = new StringBuilder();
 		accountData.append("account opened on ").append(accountOpenedOn);
-		accountData.append("balance").append(balance);
+		accountData.append("balance ").append(balance);
 		accountData.append("interest rate ").append(interestRate);
 		accountData.append("account number ").append(accountNumber);
 		return accountData.toString();
