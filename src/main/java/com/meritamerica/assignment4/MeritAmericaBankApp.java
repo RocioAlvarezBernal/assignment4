@@ -1,7 +1,7 @@
-package com.meritamerica.assignment4;
+package com.meritamerica.assignment3;
 
 public class MeritAmericaBankApp {
 	public static void main(String[] args) {
-		MeritBank.readFromFile("src/test/testMeritBank_good.txt");
+		MeritBank.readFromFile("src/test/testMeritBank_bad.txt");
 	}
 }
