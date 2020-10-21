@@ -4,7 +4,7 @@ String writeToString()
 static AccountHolder readFromString(String accountHolderData) throws Exception
 Should throw a java.lang.Exception if String cannot be correctly parsed
 */
-package com.meritamerica.assignment3;
+package com.meritamerica.assignment4;
 
 public class AccountHolder implements Comparable<AccountHolder> {
 	private static final double MAX_BALANCE = 250000;
