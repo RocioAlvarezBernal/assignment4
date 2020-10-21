@@ -2,7 +2,7 @@
 static CheckingAccount readFromString(String accountData) throws ParseException
 Should throw a java.lang.NumberFormatException if String cannot be correctly parsed*/
 
-package com.meritamerica.assignment3;
+package com.meritamerica.assignment4;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

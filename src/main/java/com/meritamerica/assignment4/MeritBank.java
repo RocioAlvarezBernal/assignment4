@@ -1,10 +1,20 @@
-/*static boolean readFromFile(String fileName)
-static boolean writeToFile(String fileName)
-static AccountHolder[] sortAccountHolders()
-static void setNextAccountNumber(long nextAccountNumber)
-*/
+//public static double recursiveFutureValue(double amount, int years, double interestRate)
+//Existing futureValue methods that used to call Math.pow() should now call this method
+//public static boolean processTransaction(Transaction transaction) throws NegativeAmountException, ExceedsAvailableBalanceException, ExceedsFraudSuspicionLimitException
+//If transaction does not violate any constraints, deposit/withdraw values from the relevant BankAccounts and add the transaction to the relevant BankAccounts
+//If the transaction violates any of the basic constraints (negative amount, exceeds available balance) the relevant exception should be thrown and the processing should terminate
+//If the transaction violates the $1,000 suspicion limit, it should simply be added to the FraudQueue for future processing
+//public static FraudQueue getFraudQueue()
+//public static BankAccount getBankAccount(long accountId)
+//Return null if account not found
 
-package com.meritamerica.assignment3;
+//static boolean readFromFile(String fileName)
+//Should also read BankAccount transactions and the FraudQueue
+//static boolean writeToFile(String fileName)
+//Should also write BankAccount transactions and the FraudQueue
+
+
+package com.meritamerica.assignment4;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

@@ -1,13 +1,8 @@
-/*BankAccount(double balance, double interestRate)
-BankAccount(double balance, double interestRate, java.util.Date accountOpenedOn)
-BankAccount(long accountNumber, double balance, double interestRate, java.util.Date accountOpenedOn)
+//public void addTransaction(Transaction transaction)
+//public List<Transaction> getTransactions()
+// make abstract 
 
-java.util.Date getOpenedOn()
-static BankAccount readFromString(String accountData) throws ParseException
-Should throw a java.lang.NumberFormatException if String cannot be correctly parsed
-String writeToString()*/
-
-package com.meritamerica.assignment3;
+package com.meritamerica.assignment4;
 
 //import java.text.DateFormat;
 import java.text.ParseException;

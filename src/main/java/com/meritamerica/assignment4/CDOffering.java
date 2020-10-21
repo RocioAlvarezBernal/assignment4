@@ -2,7 +2,7 @@
 Should throw a java.lang.NumberFormatException if String cannot be correctly parsed
 String writeToString()*/
 
-package com.meritamerica.assignment3;
+package com.meritamerica.assignment4;
 
 public class CDOffering {
 
