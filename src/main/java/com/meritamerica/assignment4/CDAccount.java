@@ -1,11 +1,22 @@
-/*Create appropriate constructors
-Override the deposit and withdraw methods to return false (CD Accounts cannot deposit new funds or withdraw funds until the term is reached)
-static CDAccount readFromString(String accountData) throws ParseException
-Should throw a java.lang.NumberFormatException if String cannot be correctly parsed
-Override writeToString method to include term
-*/
+//CheckingAccount addCheckingAccount(double openingBalance) throws ExceedsCombinedBalanceLimitException
+//If combined balance limit is exceeded, throw ExceedsCombinedBalanceLimitException
+//Should also add a deposit transaction with the opening balance
+//CheckingAccount addCheckingAccount(CheckingAccount checkingAccount) throws ExceedsCombinedBalanceLimitException
+//If combined balance limit is exceeded, throw ExceedsCombinedBalanceLimitException
+//Should also add a deposit transaction with the opening balance
+//SavingsAccount addSavingsAccount(double openingBalance) throws ExceedsCombinedBalanceLimitException
+//If combined balance limit is exceeded, throw ExceedsCombinedBalanceLimitException
+//Should also add a deposit transaction with the opening balance
+//SavingsAccount addSavingsAccount(SavingsAccount savingsAccount) throws ExceedsCombinedBalanceLimitException
+//If combined balance limit is exceeded, throw ExceedsCombinedBalanceLimitException
+//Should also add a deposit transaction with the opening balance
+//CDAccount addCDAccount(CDOffering offering, double openingBalance)
+//Should also add a deposit transaction with the opening balance
+//CDAccount addCDAccount(CDAccount cdAccount)
+//Should also add a deposit transaction with the opening balance
 
-package com.meritamerica.assignment3;
+
+package com.meritamerica.assignment4;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
