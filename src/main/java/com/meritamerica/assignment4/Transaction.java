@@ -19,7 +19,7 @@ import java.util.Formatter;
 
 public abstract class Transaction {
 	BankAccount sourceAccount;
-	BankAccount TargetAccount;
+	BankAccount targetAccount;
 	double amount;
 	Date transactionDate;   //unsure of format
 	String reason;
@@ -32,7 +32,7 @@ public abstract class Transaction {
 	}
 	
 //==========GETTERS/SETTERS===================
-	
+
 	public BankAccount getSourceAccount() {
 		return sourceAccount;
 	}
@@ -40,10 +40,10 @@ public abstract class Transaction {
 		this.sourceAccount = sourceAccount;
 	}
 	public BankAccount getTargetAccount() {
-		return TargetAccount;
+		return targetAccount;
 	}
 	public void setTargetAccount(BankAccount targetAccount) {
-		TargetAccount = targetAccount;
+		this.targetAccount = targetAccount;
 	}
 	public double getAmount() {
 		return amount;
@@ -68,6 +68,7 @@ public abstract class Transaction {
 	public String writeToString() {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 		StringBuilder sb = new StringBuilder();
+<<<<<<< HEAD
 //	Psuedo Code
 //		toString // append -1
 //		if (sourceAccount == null) {
@@ -76,13 +77,21 @@ public abstract class Transaction {
 //			sb.append(sourceAccount.getAccountNumber);
 //		}
 		sb.append(sourceAccount.getAccountNumber());
+=======
+		if (sourceAccount == null) {
+			sb.append("-1");
+		}else {
+			sb.append(sourceAccount.getAccountNumber());
+		}
+		sb.append(targetAccount.getAccountNumber());
+>>>>>>> be334f3fdde68a738e9fb4eca20c2fceceae2b28
 		sb.append(",");
 		sb.append(amount);
 		sb.append(",");
 		sb.append(dateFormatter.format(transactionDate));
 		return sb.toString();
-		
 	}
+<<<<<<< HEAD
 	public static Transaction readFromString(String transactionDataString) throws ParseException { // need to catch this exception
 		String[] localArray = transactionDataString.split(",");
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -101,6 +110,33 @@ public abstract class Transaction {
 		long targetAccount = Long.parseLong(localArray[1]);
 		double ammount = Double.parseDouble(localArray[2]);
 		Date transationDate = formatter.parse(localArray[3]);
+=======
+	public static Transaction readFromString(String transactionDataString) throws ParseException {
+		String[] localArray = transactionDataString.split(",");
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		BankAccount test;
+//		Long sourceAccount;
+
+		if (localArray[0].equals("-1")){
+			test = null;
+		}
+		else {
+//PlaceHolder to be coded when MeritBank is completed 
+//			public static BankAccount getBankAccount(long accountId)
+//			Return null if account not found
+
+			test = MeritBank.PlaceHolder(Long.valueOf(localArray[0]));
+		}		
+		long targetAccount = Long.parseLong(localArray[1]);
+		double ammount = Double.parseDouble(localArray[2]);
+		Date transationDate = formatter.parse(localArray[3]);
+		
+		if ([0] == -1) {
+			if (valueOf[2] < 0){
+				withdraw
+			}
+		}
+>>>>>>> be334f3fdde68a738e9fb4eca20c2fceceae2b28
 		
 		return new Transaction(localArray);
 	}
