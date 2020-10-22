@@ -2,7 +2,7 @@
 static CheckingAccount readFromString(String accountData) throws ParseException
 Should throw a java.lang.NumberFormatException if String cannot be correctly parsed*/
 
-package com.meritamerica.assignment3;
+package com.meritamerica.assignment4;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,13 +53,13 @@ public class CheckingAccount extends BankAccount {
 	public static CheckingAccount readFromString(String accountData) throws ParseException{
 //		int testI = 0;
 		String[] testName = accountData.split(",");
-		SimpleDateFormat daate = new SimpleDateFormat("dd/MM/yyyy");
+		
 		
 		
 		long accountNumber = Long.parseLong(testName[0]);
 		double balance = Double.parseDouble(testName[1]);
 		double interestRate = Double.parseDouble(testName[2]);
-		Date accountOpenedOn = daate.parse(testName[3]);
+		Date accountOpenedOn = formatter.parse(testName[3]);
 		CheckingAccount newCheckingAccount = new CheckingAccount(accountNumber, balance, interestRate, accountOpenedOn);
 		return newCheckingAccount;
 	}
