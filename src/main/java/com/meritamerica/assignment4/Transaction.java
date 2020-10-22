@@ -1,5 +1,6 @@
 package com.meritamerica.assignment4;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Formatter;
@@ -16,7 +17,7 @@ import java.util.Formatter;
 //public void setRejectionReason(String reason)
 
 
-public class Transaction {
+public abstract class Transaction {
 	BankAccount sourceAccount;
 	BankAccount TargetAccount;
 	double amount;
@@ -67,7 +68,13 @@ public class Transaction {
 	public String writeToString() {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 		StringBuilder sb = new StringBuilder();
-		//toString // append -1
+//	Psuedo Code
+//		toString // append -1
+//		if (sourceAccount == null) {
+//			sb.append("-1");
+//		}else {
+//			sb.append(sourceAccount.getAccountNumber);
+//		}
 		sb.append(sourceAccount.getAccountNumber());
 		sb.append(",");
 		sb.append(amount);
@@ -76,15 +83,24 @@ public class Transaction {
 		return sb.toString();
 		
 	}
-	public static Transaction readFromString(String transactionDataString) {
-		
+	public static Transaction readFromString(String transactionDataString) throws ParseException { // need to catch this exception
 		String[] localArray = transactionDataString.split(",");
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
 		
-		long sourceAccount = Long.parseLong(transactionDataString[0]);
-		long targetAccount = Long.parseLong(transactionDataString[1]);
-		double ammount = Double.parseDouble(transactionDataString[2]);
-		Date transationDate = formatter.parse(transactionDataString[3]);
+//	Psuedo Code
+//		if localArray[0]="-1"{
+//				sourceAccount = null;
+//		}
+//		else {
+//			sourceAccount = Long.parseLong(localArray[0]);
+//		}
+//		long sourceAccount = Long.parseLong(transactionDataString[0]);
+		
+//are we supposed to use the name of our stingArray here? I think 
+		long targetAccount = Long.parseLong(localArray[1]);
+		double ammount = Double.parseDouble(localArray[2]);
+		Date transationDate = formatter.parse(localArray[3]);
 		
 		return new Transaction(localArray);
 	}

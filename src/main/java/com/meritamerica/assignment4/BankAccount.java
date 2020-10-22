@@ -1,35 +1,20 @@
-//public void addTransaction(Transaction transaction)
-//public List<Transaction> getTransactions()
-// make abstract 
 
 package com.meritamerica.assignment4;
-
-//import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.lang.NumberFormatException;
 
 public class BankAccount {
-//	private static final double MAX_BALANCE = 250000;
 
-//	static Date date;
-//	static Date date = new Date();
 	 Date accountOpenedOn;
 	double balance;
 	double interestRate;
-//	double futureValue;
-//	double accountTotal;
-	long accountNumber;
+
 	public static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 	
-//
-//	public BankAccount(double balance, double interestRate) {
-//		this.balance = balance;
-//		this.interestRate = interestRate;
-//	}
-////	
-	
+
+
 //========================BANK ACCOUNT CONSTRUCTORS===================================
 	public BankAccount(double balance, double interestRate) {
 		this.balance = balance;
@@ -38,19 +23,7 @@ public class BankAccount {
 	    this.accountNumber = MeritBank.getNextAccountNumber();
 	}
 
-//	BankAccount(double interestRate, double balance, Date accountOpenedOn) {
-//		BankAccount.accountOpenedOn = new Date();
-//		this.balance = balance;
-////		this.interestRate = ;
-//	}
- 
-//	BankAccount(long accountNumber, java.util.Date accountOpenedOn, double balance, double interestRate) {
-//		this.accountNumber = accountNumber;
-//		this.accountNumber = accountNumber;
-//		this.balance = balance;
-//		this.interestRate = interestRate;
-//		BankAccount.accountOpenedOn = new Date();
-//
+
 	
 	BankAccount(double balance, double interestRate, Date accountOpenedOn){
 		this(balance, interestRate);
@@ -118,15 +91,10 @@ public class BankAccount {
 	        double interestRate = Double.parseDouble(testName[2]);
 	        Date accountOpenedOn = daate.parse(testName[3]);
 	        return new BankAccount(accountNumber, balance, interestRate, accountOpenedOn);
-			////////////
-			
-			// after catching an exception it will return null not sure how to use
-			// e.printStackTrace() but that will indicate where the exception takes place
-			// not specified if you'd need to replace the exception with something else
+
 		} catch (ParseException e) {
 			e.printStackTrace();
-//	    	 String locationOfException = e.printStackTrace();
-//	    	 System.out.println("Your Exception is located on " e.printStackTrace());
+
 			return null;
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
