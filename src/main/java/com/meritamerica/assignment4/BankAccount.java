@@ -7,10 +7,10 @@ import java.lang.NumberFormatException;
 
 public class BankAccount {
 
-	 Date accountOpenedOn;
+	Date accountOpenedOn;
 	double balance;
 	double interestRate;
-
+	long accountNumber;
 	public static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 	
 

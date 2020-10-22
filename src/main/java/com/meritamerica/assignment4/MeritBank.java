@@ -13,7 +13,6 @@
 //static boolean writeToFile(String fileName)
 //Should also write BankAccount transactions and the FraudQueue
 
-
 package com.meritamerica.assignment4;
 
 import java.io.BufferedReader;
@@ -64,7 +63,6 @@ public class MeritBank {
 		}
 		return bestOffering;
 	}
-
 
 	public static CDOffering getSecondBestCDOffering(double depositAmount) {
 		if (CDoff == null) {
@@ -161,7 +159,6 @@ public class MeritBank {
 
 	}
 
-
 	static boolean writeToFile(String fileName) {
 		try {
 			FileWriter fileOut = new FileWriter(fileName);
@@ -177,27 +174,24 @@ public class MeritBank {
 
 			bufferedWriter.write(String.valueOf(AHNewaccounts.length));
 			bufferedWriter.newLine();
-			
-			
+
 			for (int a = 0; a < AHNewaccounts.length; a++) {
 				bufferedWriter.write(AHNewaccounts[a].writeToString());
 				bufferedWriter.newLine();
 				bufferedWriter.write(String.valueOf(AHNewaccounts[a].getCheckingAccounts().length));
 				bufferedWriter.newLine();
-				for (int b = 0; b< AHNewaccounts[a].getCheckingAccounts().length; b++) {
+				for (int b = 0; b < AHNewaccounts[a].getCheckingAccounts().length; b++) {
 					bufferedWriter.write(AHNewaccounts[a].getCheckingAccounts()[b].writeToString());
 					bufferedWriter.newLine();
 				}
-				
-				
+
 				bufferedWriter.write(String.valueOf(AHNewaccounts[a].getSavingsAccounts().length));
 				bufferedWriter.newLine();
 				for (int x = 0; x < AHNewaccounts[a].getSavingsAccounts().length; x++) {
 					bufferedWriter.write(AHNewaccounts[a].getSavingsAccounts()[x].writeToString());
 					bufferedWriter.newLine();
 				}
-				
-				
+
 				bufferedWriter.write(String.valueOf(AHNewaccounts[a].getCDAccounts().length));
 				bufferedWriter.newLine();
 				for (int n = 0; n < AHNewaccounts[a].getCDAccounts().length; n++) {
@@ -213,12 +207,11 @@ public class MeritBank {
 
 	}
 
-
 	static AccountHolder[] sortAccountHolders() {
 		Arrays.sort(AHNewaccounts);
 		for (AccountHolder modify : AHNewaccounts) {
 			System.out.println("Modified arr[] " + modify);
-			
+
 		}
 		return AHNewaccounts;
 	}
@@ -227,5 +220,12 @@ public class MeritBank {
 		nextAccountNumber = accountNumber;
 
 	}
-
+	
+	static BankAccount getBankAccount(long accountId) {//// Return null if account not
+		BankAccount longName;
+		return longName;
+	}
+	 
+	 
+	
 }
