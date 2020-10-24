@@ -1,6 +1,7 @@
-//public static double recursiveFutureValue(double amount, int years, double interestRate)
+
 //Existing futureValue methods that used to call Math.pow() should now call this method
 //public static boolean processTransaction(Transaction transaction) throws NegativeAmountException, ExceedsAvailableBalanceException, ExceedsFraudSuspicionLimitException
+
 //If transaction does not violate any constraints, deposit/withdraw values from the relevant BankAccounts and add the transaction to the relevant BankAccounts
 //If the transaction violates any of the basic constraints (negative amount, exceeds available balance) the relevant exception should be thrown and the processing should terminate
 //If the transaction violates the $1,000 suspicion limit, it should simply be added to the FraudQueue for future processing
@@ -22,13 +23,17 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MeritBank {
 
 	private static CDOffering CDoff[] = new CDOffering[0];
 	private static AccountHolder AHNewaccounts[] = new AccountHolder[0];
 	static long nextAccountNumber = 0;
+	static FraudQueue fraudQueue; // what to do here but we like the way it looks
 
 	public static void addAccountHolder(AccountHolder accountHolder) {
 
@@ -109,16 +114,23 @@ public class MeritBank {
 		return futureValueM;
 	}
 
-	static boolean readFromFile(String fileName) {
-		CDOffering larry[] = new CDOffering[0];
+	static boolean readFromFile(String fileName) 
+			throws FileNotFoundException, ExceedsCombinedBalanceLimitException, 
+			NegativeAmountException, ExceedsFraudSuspicionLimitException, ExceedsAvailableBalanceException {
+		
+		
+		CDOffering offering[] = new CDOffering[0];
+		Map<String, ArrayList> transactionHashMap = new HashMap<String, ArrayList>();
+		fraudQueue = new FraudQueue();
+
 		try {
 			FileReader file = new FileReader(fileName);
 			BufferedReader bufferedReader = new BufferedReader(file);
 			Long nextAccountNumber = Long.valueOf(bufferedReader.readLine());
 			int offeringNumber = Integer.valueOf(bufferedReader.readLine());
 			for (int i = 0; i < offeringNumber; i++) {
-				larry = Arrays.copyOf(larry, larry.length + 1);
-				larry[larry.length - 1] = CDOffering.readFromString(bufferedReader.readLine());
+				offering = Arrays.copyOf(offering, offering.length + 1);
+				offering[offering.length - 1] = CDOffering.readFromString(bufferedReader.readLine());
 			}
 			int accountHolderNumber = Integer.valueOf(bufferedReader.readLine());
 			AccountHolder[] newAccountHoldersArr = new AccountHolder[accountHolderNumber];
@@ -127,6 +139,7 @@ public class MeritBank {
 				int checkingAccNum = Integer.valueOf(bufferedReader.readLine());
 				for (int b = 0; b < checkingAccNum; b++) {
 					accHolder.addCheckingAccount(CheckingAccount.readFromString(bufferedReader.readLine()));
+					
 				}
 				int savingAccNum = Integer.valueOf(bufferedReader.readLine());
 				for (int c = 0; c < savingAccNum; c++) {
@@ -137,9 +150,13 @@ public class MeritBank {
 					accHolder.addCDAccount(CDAccount.readFromString(bufferedReader.readLine()));
 				}
 				newAccountHoldersArr[a] = accHolder;
+				
+				//int fraudQueueAlerts = Integer.valueOf(bufferedReader.readLine());
+		
+				
 			}
 			setNextAccountNumber(nextAccountNumber);
-			CDoff = larry;
+			CDoff = offering;
 			AHNewaccounts = newAccountHoldersArr;
 			file.close();
 			return true;
@@ -220,12 +237,80 @@ public class MeritBank {
 		nextAccountNumber = accountNumber;
 
 	}
-	
+
 	static BankAccount getBankAccount(long accountId) {//// Return null if account not
-		BankAccount longName;
-		return longName;
-	}
-	 
-	 
+		
+		
+		for(AccountHolder item: AHNewaccounts) {
+			for(int i = 0; i < item.getCheckingAccounts().length; i++) {
+				
+				if(accountId == AHNewaccounts[i].getCheckingAccounts().
+			}
+			
+		}
+			
+			
+			
+		return null;
+		
 	
+	
+	public static double recursiveFutureValue(double amount, int years, double interestRate) {
+		double newAmount = 0;
+		if (years > 0) {
+			for (int i = 1; i <= years; i++) {
+				newAmount = amount * interestRate;
+				years--;
+				recursiveFutureValue(newAmount, years, interestRate);
+			}
+			return newAmount;
+		} else {
+			return amount;
+
+		}
+	}
+
+	public static boolean processTransaction(Transaction transaction)
+			throws NegativeAmountException, ExceedsAvailableBalanceException, ExceedsFraudSuspicionLimitException {
+		BankAccount currentSourceAccount = transaction.getSourceAccount();
+		BankAccount currentTargetAccount = transaction.getTargetAccount();
+
+		if (!(currentSourceAccount == null)) { // if there is a current sourceAccount, this transaction is a transfer
+			if (transaction.getAmount() <= 0 && transaction.getAmount() < 1000) {
+				throw new NegativeAmountException("Cannot transfer negative amount.");
+			}
+			if (transaction.getAmount() > currentSourceAccount.getBalance()) {
+				throw new ExceedsAvailableBalanceException("Insufficient Funds");
+			}
+			if (transaction.getAmount() > 1000) {
+				throw new ExceedsFraudSuspicionLimitException("Transactions over $1,000 must be reviewed");
+				fraudQueue.addTransaction(transaction);
+			}
+
+		}
+//WITHDRAW AND/OR DEPOSIT
+		if (currentSourceAccount == null) {// if null, this is either withdraw or deposit
+
+			if (transaction.getAmount() <= 0) {
+				throw new NegativeAmountException("Amount cannot negative amount.");
+			}
+
+			if (transaction.getAmount() > 1000) {
+				throw new ExceedsFraudSuspicionLimitException("Transactions over $1,000 must be reviewed");
+				fraudQueue.addTransaction(transaction);
+			}
+			if (currentSourceAccount == null) {// if null, this is either withdraw or deposit
+				if (transaction.getAmount() > currentTargetAccount.getBalance()) {
+					throw new ExceedsAvailableBalanceException("Insufficient Funds");
+				}
+			}
+		}
+		return true;
+	}
+
+	public static FraudQueue getFraudQueue() { //
+
+		return fraudQueue;
+	}
+
 }

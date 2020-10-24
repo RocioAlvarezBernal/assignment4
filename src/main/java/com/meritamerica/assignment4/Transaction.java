@@ -15,9 +15,9 @@ import java.util.Formatter;
 
 public abstract class Transaction {
 	static BankAccount sourceAccount;
-	BankAccount targetAccount;
+	static BankAccount targetAccount;
 	double amount;
-	Date transactionDate;   //unsure of format
+	static Date transactionDate;   //unsure of format
 	String reason;
 
 	
@@ -81,7 +81,7 @@ public abstract class Transaction {
         sb.append(",");
         sb.append(amount);
         sb.append(",");
-        sb.append(dateFormatter.format(transactionDate));
+        sb.append(dateFormatter.format(transactionDate));	
         return sb.toString();
     }
 
@@ -98,7 +98,7 @@ public abstract class Transaction {
 		}
 		else {
 			test = MeritBank.getBankAccount(Long.valueOf(localArray[0]));
-		
+			
 		}
 
 		BankAccount targetAccount =  MeritBank.getBankAccount(Long.valueOf(localArray[1]));
@@ -108,13 +108,13 @@ public abstract class Transaction {
 			if(Integer.valueOf(localArray[0]) == -1) {
 				
 				if(amount < 0 ) { 
-					WithdrawTransaction transaction = new WithdrawTransaction(targetAccount, amount, transactionDate);
-					return transaction;
+					WithdrawTransaction withdraw = new WithdrawTransaction(targetAccount, amount, transactionDate);
+					return withdraw;
 				}
 				
 				if(amount > 0) { 
-					DepositTransaction transaction = new DepositTransaction(targetAccount, amount, transactionDate);
-					return transaction;
+					DepositTransaction deposit = new DepositTransaction(targetAccount, amount, transactionDate);
+					return deposit;
 				}
 				
 			} else {   

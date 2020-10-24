@@ -17,7 +17,7 @@ public class CheckingAccount extends BankAccount {
 //	static int x = 0;
 //	static String[] caArray = new String[x];
 
-	CheckingAccount(double openingBalance, double interest2) {
+	CheckingAccount(double openingBalance, double interest) {
 		super(openingBalance, interest);
 	}
 	
