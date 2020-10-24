@@ -10,4 +10,7 @@ public class WithdrawTransaction extends Transaction{
 		this.amount= amount;
 		this.transactionDate = new Date();
 		}
+	
+	
+	
 	}

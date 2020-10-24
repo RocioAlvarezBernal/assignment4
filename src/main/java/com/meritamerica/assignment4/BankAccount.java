@@ -2,17 +2,19 @@
 package com.meritamerica.assignment4;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.awt.List;
 import java.lang.NumberFormatException;
 
-public class BankAccount {
+public abstract class BankAccount {
 
 	Date accountOpenedOn;
 	double balance;
 	double interestRate;
 	long accountNumber;
 	public static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-	
+	ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 
 
 //========================BANK ACCOUNT CONSTRUCTORS===================================
@@ -73,34 +75,34 @@ public class BankAccount {
 		return futureVal;
 	}
 
-	static BankAccount readFromString(String accountData) throws ParseException, NumberFormatException {
-		// setting the array index so it will always contain the same information in
-		// that particular index ex: 0 is for date 1 is for balance etc might need a loop for this 
-//		int testI = 0;
-		try {
-			// try this block of code this will test for errors while being executed
-			String[] testName = accountData.split(",");
-			// ^ will create a sting array with the parameter "accountData"
-			SimpleDateFormat daate = new SimpleDateFormat("dd/MM/yyyy");
-			// ^ parse the date using SimpleDateFormat
-
-			// this block will set the details to an index in the string array according to the order they 
-			//are in the provided file
-			Long accountNumber = Long.parseLong(testName[0]);
-	        double balance = Double.parseDouble(testName[1]);
-	        double interestRate = Double.parseDouble(testName[2]);
-	        Date accountOpenedOn = daate.parse(testName[3]);
-	        return new BankAccount(accountNumber, balance, interestRate, accountOpenedOn);
-
-		} catch (ParseException e) {
-			e.printStackTrace();
-
-			return null;
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+//	static BankAccount readFromString(String accountData) throws ParseException, NumberFormatException {
+//		// setting the array index so it will always contain the same information in
+//		// that particular index ex: 0 is for date 1 is for balance etc might need a loop for this 
+////		int testI = 0;
+//		try {
+//			// try this block of code this will test for errors while being executed
+//			String[] testName = accountData.split(",");
+//			// ^ will create a sting array with the parameter "accountData"
+//			SimpleDateFormat daate = new SimpleDateFormat("dd/MM/yyyy");
+//			// ^ parse the date using SimpleDateFormat
+//
+//			// this block will set the details to an index in the string array according to the order they 
+//			//are in the provided file
+//			Long accountNumber = Long.parseLong(testName[0]);
+//	        double balance = Double.parseDouble(testName[1]);
+//	        double interestRate = Double.parseDouble(testName[2]);
+//	        Date accountOpenedOn = daate.parse(testName[3]);
+//	        return new BankAccount(accountNumber, balance, interestRate, accountOpenedOn);
+//
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//
+//			return null;
+//		} catch (NumberFormatException e) {
+//			e.printStackTrace();
+//			return null;
+//		}
+//	}
 
 	// will create a string out of all the details provided and append the 
 	String writeToString() {
@@ -111,4 +113,25 @@ public class BankAccount {
 		accountData.append("account number ").append(accountNumber);
 		return accountData.toString();
 	}
+	
+	
+	public void addTransaction(Transaction transaction) {
+		
+		this.transactions.add(transaction);
+	}
+	
+	
+	public ArrayList<Transaction> getTransactions(){
+		
+		return transactions;
+	}
+
+	
 }
+
+
+
+
+
+
+

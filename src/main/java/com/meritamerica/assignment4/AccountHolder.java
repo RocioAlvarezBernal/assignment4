@@ -18,11 +18,9 @@ public class AccountHolder implements Comparable<AccountHolder> {
 //or it would be d to in their respected account files 
 	CheckingAccount[] addedCheckingAccounts = new CheckingAccount[0];
 
-
 	SavingsAccount[] addedsavingsAccounts = new SavingsAccount[0];
 
 	CDAccount[] addedCDAccounts = new CDAccount[0];
-
 
 	public AccountHolder(String firstName, String middleName, String lastName, String ssn) {
 		this.firstName = firstName;
@@ -30,7 +28,6 @@ public class AccountHolder implements Comparable<AccountHolder> {
 		this.lastName = lastName;
 		this.ssn = ssn;
 	}
-
 
 //Getters and setters 
 	public String getFirstName() {
@@ -67,38 +64,71 @@ public class AccountHolder implements Comparable<AccountHolder> {
 
 //	new checking account from addCheckingAccount(CheckingAccount) that creates a new object for the array 
 
-	public CheckingAccount addCheckingAccount(double openingBalance) {
+	public CheckingAccount addCheckingAccount(double openingBalance)
+			throws ExceedsCombinedBalanceLimitException, NegativeAmountException, ExceedsFraudSuspicionLimitException, ExceedsAvailableBalanceException {
+
+		CheckingAccount[] openChekcingDeposit = new CheckingAccount[addedCheckingAccounts.length + 1];
+
 		if (getCheckingBalance() + getSavingsBalance() + openingBalance >= MAX_BALANCE) {
-			return null;
+			throw new ExceedsCombinedBalanceLimitException("Combined balance exceeds $250,000");
 		}
 		CheckingAccount newAccount = new CheckingAccount(openingBalance, CheckingAccount.interest);
-		CheckingAccount[] testChecking = new CheckingAccount[addedCheckingAccounts.length + 1];
-		for (int i = 0; i < testChecking.length - 1; i++) {
-			testChecking[i] = addedCheckingAccounts[i];
+		DepositTransaction deposit = new DepositTransaction(newAccount, openingBalance, Transaction.transactionDate);
+
+		try {
+			MeritBank.processTransaction(deposit);
+		} catch (NegativeAmountException ex) {
+			throw new NegativeAmountException("Cannot deposit negative amount.");
+
+		} catch (ExceedsFraudSuspicionLimitException ex) {
+			throw new ExceedsFraudSuspicionLimitException("Sent to fraud team for review.");
 		}
-		addedCheckingAccounts = testChecking;
+
+		for (int i = 0; i < openChekcingDeposit.length - 1; i++) {
+			openChekcingDeposit[i] = addedCheckingAccounts[i];
+		}
+		addedCheckingAccounts = openChekcingDeposit;
 		addedCheckingAccounts[addedCheckingAccounts.length - 1] = newAccount;
 		return newAccount;
 	}
 
-	public boolean addCheckingAccount(CheckingAccount checkingAccount) {
-		try {
-			if (checkingAccount.getBalance() + getCheckingBalance() + getSavingsBalance() >= MAX_BALANCE) {
-				return false;
+	public CheckingAccount addCheckingAccount(CheckingAccount checkingAccount) throws ExceedsCombinedBalanceLimitException, 
+																					  NegativeAmountException, 
+																					  ExceedsFraudSuspicionLimitException,
+																					  ExceedsAvailableBalanceException
+																							{
+		
+		CheckingAccount[] depositChecking = new CheckingAccount[addedCheckingAccounts.length + 1];
+		
+		if (checkingAccount.getBalance() + getCheckingBalance() + getSavingsBalance() >= MAX_BALANCE) {
+				throw new ExceedsCombinedBalanceLimitException("Combined balance exceeds $250,000");
 			}
-			CheckingAccount[] testChecking = new CheckingAccount[addedCheckingAccounts.length + 1];
-			for (int i = 0; i < testChecking.length - 1; i++) {
-				testChecking[i] = addedCheckingAccounts[i];
+		
+		DepositTransaction deposit = new DepositTransaction(checkingAccount, checkingAccount.getBalance(), Transaction.transactionDate );
+		try {	
+			MeritBank.processTransaction(deposit);
 			}
-			addedCheckingAccounts = testChecking;
-			addedCheckingAccounts[addedCheckingAccounts.length - 1] = checkingAccount;
-			return checkingAccount != null;
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-			return null != null;
-		}
-	}
+			catch (NegativeAmountException ex) {
+			throw new NegativeAmountException("Cannot deposit negative amount.");
+		
+	    }
+	    catch (ExceedsFraudSuspicionLimitException ex) {
+	    	throw new ExceedsFraudSuspicionLimitException("Sent to fraud team for review.");
+	    }
+		
+		
+		for (int i = 0; i < depositChecking.length - 1; i++) {
+			depositChecking[i] = addedCheckingAccounts[i];
+		}	
 
+			
+			
+			addedCheckingAccounts = depositChecking;
+			addedCheckingAccounts[addedCheckingAccounts.length - 1] = checkingAccount;
+			
+			return checkingAccount;
+	 
+	}
 
 	public CheckingAccount[] getCheckingAccounts() {
 		return addedCheckingAccounts;
@@ -117,31 +147,62 @@ public class AccountHolder implements Comparable<AccountHolder> {
 		}
 		return checkingBalance;
 	}
-
-	public SavingsAccount addSavingsAccount(double openingBalance) {
+	
+	public SavingsAccount addSavingsAccount(double openingBalance) 
+			throws ExceedsCombinedBalanceLimitException, NegativeAmountException, ExceedsFraudSuspicionLimitException, ExceedsAvailableBalanceException {
 		if (getSavingsBalance() + getCheckingBalance() + openingBalance >= MAX_BALANCE) {
-			return null;
+			throw new ExceedsCombinedBalanceLimitException("Combined balance exceeds $250,000");
 		}
+		
 		SavingsAccount newAccount = new SavingsAccount(openingBalance, SavingsAccount.interest);
-		SavingsAccount[] testsavings = new SavingsAccount[addedsavingsAccounts.length + 1];
-		for (int i = 0; i < testsavings.length - 1; i++) {
-			testsavings[i] = addedsavingsAccounts[i];
+		DepositTransaction deposit = new DepositTransaction(newAccount, openingBalance, Transaction.transactionDate);
+		
+		SavingsAccount[] openingSavingsAccount = new SavingsAccount[addedsavingsAccounts.length + 1];
+		
+		try {
+			MeritBank.processTransaction(deposit);
+		} catch (NegativeAmountException ex) {
+			throw new NegativeAmountException("Cannot deposit negative amount.");
+
+		} catch (ExceedsFraudSuspicionLimitException ex) {
+			throw new ExceedsFraudSuspicionLimitException("Sent to fraud team for review.");
 		}
-		addedsavingsAccounts = testsavings;
+		
+		for (int i = 0; i < openingSavingsAccount.length - 1; i++) {
+			openingSavingsAccount[i] = addedsavingsAccounts[i];
+		}
+		addedsavingsAccounts = openingSavingsAccount;
 		addedsavingsAccounts[addedsavingsAccounts.length - 1] = newAccount;
 		return newAccount;
 	}
 
-	public SavingsAccount addSavingsAccount(SavingsAccount savingsAccount) {
+	public SavingsAccount addSavingsAccount(SavingsAccount savingsAccount)
+			throws ExceedsCombinedBalanceLimitException, NegativeAmountException, ExceedsFraudSuspicionLimitException, ExceedsAvailableBalanceException
+	{
 		if (savingsAccount.getBalance() + getCheckingBalance() + getSavingsBalance() >= 250000) {
 			System.out.println("Cannot open a new Savings Account because aggregate balance of accounts is to high.");
-			return null;
+			
+			throw new ExceedsCombinedBalanceLimitException("Combined balance exceeds $250,000");
 		}
-		SavingsAccount[] testsavings = new SavingsAccount[addedsavingsAccounts.length + 1];
-		for (int i = 0; i < testsavings.length - 1; i++) {
-			testsavings[i] = addedsavingsAccounts[i];
+		
+		DepositTransaction deposit = new DepositTransaction(savingsAccount, savingsAccount.getBalance(), Transaction.transactionDate);
+		
+		SavingsAccount[] depositSavingsAccount = new SavingsAccount[addedsavingsAccounts.length + 1];
+		
+		try {
+			MeritBank.processTransaction(deposit);
+		} catch (NegativeAmountException ex) {
+			throw new NegativeAmountException("Cannot deposit negative amount.");
+
+		} catch (ExceedsFraudSuspicionLimitException ex) {
+			throw new ExceedsFraudSuspicionLimitException("Sent to fraud team for review.");
 		}
-		addedsavingsAccounts = testsavings;
+		
+		for (int i = 0; i < depositSavingsAccount.length - 1; i++) {
+			
+			depositSavingsAccount[i] = addedsavingsAccounts[i];
+		}
+		addedsavingsAccounts = depositSavingsAccount;
 		addedsavingsAccounts[addedsavingsAccounts.length - 1] = savingsAccount;
 		return savingsAccount;
 	}
@@ -159,10 +220,22 @@ public class AccountHolder implements Comparable<AccountHolder> {
 		return addedsavingsAccounts;
 	}
 
-
-
-	public CDAccount addCDAccount(CDOffering offering, double openBalance) {
+	public CDAccount addCDAccount(CDOffering offering, double openBalance) 
+			throws ExceedsCombinedBalanceLimitException, NegativeAmountException, ExceedsFraudSuspicionLimitException, ExceedsAvailableBalanceException	
+	{
 		CDAccount newAccount = new CDAccount(offering, openBalance);
+		
+		DepositTransaction deposit = new DepositTransaction(newAccount, openBalance, Transaction.transactionDate);
+
+		try {
+			MeritBank.processTransaction(deposit);
+		} catch (NegativeAmountException ex) {
+			throw new NegativeAmountException("Cannot deposit negative amount.");
+
+		} catch (ExceedsFraudSuspicionLimitException ex) {
+			throw new ExceedsFraudSuspicionLimitException("Sent to fraud team for review.");
+		}
+		
 		CDAccount[] testcd = new CDAccount[addedCDAccounts.length + 1];
 		for (int i = 0; i < testcd.length - 1; i++) {
 			testcd[i] = addedCDAccounts[i];
@@ -172,8 +245,22 @@ public class AccountHolder implements Comparable<AccountHolder> {
 		return newAccount;
 	}
 
-	public CDAccount addCDAccount(CDAccount cdAccount) {
+	public CDAccount addCDAccount(CDAccount cdAccount)
+			throws ExceedsCombinedBalanceLimitException, NegativeAmountException, ExceedsFraudSuspicionLimitException, ExceedsAvailableBalanceException
+	{
 		CDAccount[] testcd = new CDAccount[addedCDAccounts.length + 1];
+		
+		DepositTransaction deposit = new DepositTransaction(cdAccount, cdAccount.getBalance(), Transaction.transactionDate);
+
+		try {
+			MeritBank.processTransaction(deposit);
+		} catch (NegativeAmountException ex) {
+			throw new NegativeAmountException("Cannot deposit negative amount.");
+
+		} catch (ExceedsFraudSuspicionLimitException ex) {
+			throw new ExceedsFraudSuspicionLimitException("Sent to fraud team for review.");
+		}
+			
 		for (int i = 0; i < testcd.length - 1; i++) {
 			testcd[i] = addedCDAccounts[i];
 		}
@@ -186,12 +273,10 @@ public class AccountHolder implements Comparable<AccountHolder> {
 		return addedCDAccounts;
 	}
 
-
 	public int getNumberOfSavingsAccounts() {
 		int numberOfSavingsAccounts = addedsavingsAccounts.length;
 		return numberOfSavingsAccounts;
 	}
-
 
 	public int getNumberOfCDAccounts() {
 		int amountCDAccounts = this.addedCDAccounts.length;
@@ -218,7 +303,6 @@ public class AccountHolder implements Comparable<AccountHolder> {
 		double combo = getCDBalance() + getSavingsBalance() + getCheckingBalance();
 		return combo;
 	}
-
 
 	public String writeToString() {
 		StringBuilder accountHolderData = new StringBuilder();

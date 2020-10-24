@@ -25,20 +25,10 @@ import java.util.Date;
 public class CDAccount extends BankAccount {
 
 	Date date;
-//	static Date accountOpenedOn;
-//	double balance;
-//	double interestRate;
-//	double futureValue;
-//	double accountTotal;
-//	long accountNumber;
 	private int term;
 	CDOffering offering;
 
-//	CDAccount(double openBalance, double interestRate, CDOffering offering) {
-//		super(openBalance, offering.getInterestRate());
-//		this.offering = offering;
-////		this.balance = balance;
-//	}
+
 
 	public CDAccount( long accountNumber,Date accountOpenedOn, double balance, double interestRate, int term){
 		super(balance, interestRate, accountOpenedOn);
@@ -47,18 +37,13 @@ public class CDAccount extends BankAccount {
 
 	}
 	public CDAccount(CDOffering offering, double openingBalance){
-//	     super();
 		super(openingBalance,offering.getInterestRate());
 		this.offering = offering;
 		this.term = offering.getTerm();
 	}
 	 
 
-//	public CDAccount(double balance, double interestRate, double interestRate, Date accountOpenedOn, int term) {
-//		super(interestRate, interestRate, balance);
-////		this.balance = balance;
-//		this.term = term;
-//	}
+
 	public CDAccount(long accountNumber, double balance, double interestRate, Date accountOpenedOn, int term) {
 		super(accountNumber, balance,interestRate,accountOpenedOn);
 		this.term = term;
@@ -86,39 +71,7 @@ public class CDAccount extends BankAccount {
     }
 	
 	
-//	public double getBalance() {
-////		balance= this.balance;
-//		return this.balance;
-//
-//	}
 
-//	public double getInterestRate() {
-//		return this.offering.getInterestRate();
-//	}
-
-//	public int getTerm() {
-//		return this.term;
-//	}
-//
-//	public Date getStartDate() {
-//		return date;
-////		return this.date;
-//	}
-////
-////	public long getAccountNumber() {
-////		return getAccountNumber();
-////	}
-//	
-//	public boolean withdraw(double amount) {
-//        return false;
-//    }
-//
-//	public double futureValue() {
-//		return super.futureValue(term);
-//	}
-//	 public boolean deposit(double amount) {
-//	    	return false;
-//	    }
 //same as Bank account with different of term included therefore on stringOverRide we append the term as well 
 	public static CDAccount readFromString(String accountData) throws ParseException, NumberFormatException {
 //		int testI = 0;
@@ -140,4 +93,8 @@ public class CDAccount extends BankAccount {
 		stringOverRide.append(term);
 		return stringOverRide.toString();
 	}
+	
+	
+	
+	
 }

@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FraudQueue {
-	
+	Transaction transaction;
 	public List<Transaction> listOfTransaction = new ArrayList<Transaction>();
 	
 	FraudQueue(){
 		
 	}
 	public void addTransaction(Transaction transaction) {
-		
+		listOfTransaction.add(transaction);
 	}
 	public Transaction getTransaction() {
-		
+		return transaction; 
 	}
 
 
