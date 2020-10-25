@@ -13,8 +13,8 @@ public class FraudQueue {
 	public void addTransaction(Transaction transaction) {
 		listOfTransaction.add(transaction);
 	}
-	public Transaction getTransaction() {
-		return transaction; 
+	public List <Transaction> getTransaction() {
+		return listOfTransaction; 
 	}
 
 

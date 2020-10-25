@@ -26,14 +26,16 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class MeritBank {
 
 	private static CDOffering CDoff[] = new CDOffering[0];
 	private static AccountHolder AHNewaccounts[] = new AccountHolder[0];
 	static long nextAccountNumber = 0;
-	static FraudQueue fraudQueue; // what to do here but we like the way it looks
+	static FraudQueue fraudQueue = new FraudQueue(); // what to do here but we like the way it looks
 
 	public static void addAccountHolder(AccountHolder accountHolder) {
 
@@ -114,13 +116,12 @@ public class MeritBank {
 		return futureValueM;
 	}
 
-	static boolean readFromFile(String fileName) 
-			throws FileNotFoundException, ExceedsCombinedBalanceLimitException, 
+	static boolean readFromFile(String fileName) throws FileNotFoundException, ExceedsCombinedBalanceLimitException,
 			NegativeAmountException, ExceedsFraudSuspicionLimitException, ExceedsAvailableBalanceException {
-		
-		
+
 		CDOffering offering[] = new CDOffering[0];
-		Map<String, ArrayList> transactionHashMap = new HashMap<String, ArrayList>();
+//		Map<String, ArrayList> transactionHashMap = new HashMap<String, ArrayList>();
+		Set<String> transactions = new HashSet<String>();
 		fraudQueue = new FraudQueue();
 
 		try {
@@ -139,7 +140,7 @@ public class MeritBank {
 				int checkingAccNum = Integer.valueOf(bufferedReader.readLine());
 				for (int b = 0; b < checkingAccNum; b++) {
 					accHolder.addCheckingAccount(CheckingAccount.readFromString(bufferedReader.readLine()));
-					
+
 				}
 				int savingAccNum = Integer.valueOf(bufferedReader.readLine());
 				for (int c = 0; c < savingAccNum; c++) {
@@ -150,10 +151,21 @@ public class MeritBank {
 					accHolder.addCDAccount(CDAccount.readFromString(bufferedReader.readLine()));
 				}
 				newAccountHoldersArr[a] = accHolder;
-				
-				//int fraudQueueAlerts = Integer.valueOf(bufferedReader.readLine());
-		
-				
+
+				int fraudQueueAlerts = Integer.valueOf(bufferedReader.readLine());
+				for (int x = 0; x < fraudQueueAlerts; x++) {
+					fraudQueue.addTransaction(Transaction.readFromString(bufferedReader.readLine()));
+				}
+				for (String transaction : transactions) {
+					Transaction newTransactions = Transaction.readFromString(transaction);
+					if (newTransactions.getSourceAccount() == null) {
+						newTransactions.getTargetAccount().addTransaction(newTransactions);
+					} else {
+						newTransactions.getSourceAccount().addTransaction(newTransactions);
+						newTransactions.getSourceAccount().addTransaction(newTransactions);
+					}
+				}
+				return true;
 			}
 			setNextAccountNumber(nextAccountNumber);
 			CDoff = offering;
@@ -191,7 +203,6 @@ public class MeritBank {
 
 			bufferedWriter.write(String.valueOf(AHNewaccounts.length));
 			bufferedWriter.newLine();
-
 			for (int a = 0; a < AHNewaccounts.length; a++) {
 				bufferedWriter.write(AHNewaccounts[a].writeToString());
 				bufferedWriter.newLine();
@@ -207,18 +218,27 @@ public class MeritBank {
 				for (int x = 0; x < AHNewaccounts[a].getSavingsAccounts().length; x++) {
 					bufferedWriter.write(AHNewaccounts[a].getSavingsAccounts()[x].writeToString());
 					bufferedWriter.newLine();
+
+					bufferedWriter.write(String.valueOf(AHNewaccounts[a].getCDAccounts().length));
+					bufferedWriter.newLine();
+					for (int n = 0; n < AHNewaccounts[a].getCDAccounts().length; n++) {
+						bufferedWriter.write(AHNewaccounts[a].getCDAccounts()[n].writeToString());
+						bufferedWriter.newLine();
+					}
 				}
 
-				bufferedWriter.write(String.valueOf(AHNewaccounts[a].getCDAccounts().length));
+//			bufferedWriter.newLine();
+				bufferedWriter.write(String.valueOf(fraudQueue.getTransaction().size()));
 				bufferedWriter.newLine();
-				for (int n = 0; n < AHNewaccounts[a].getCDAccounts().length; n++) {
-					bufferedWriter.write(AHNewaccounts[a].getCDAccounts()[n].writeToString());
-					bufferedWriter.newLine();
-				}
+				for (int fraud = 0; fraud < fraudQueue.getTransaction().size(); fraud++)
+//				bufferedWriter.write(fraudQueue.getTransaction()[fraud].writeToString());
+//				bufferedWriter.write(fraudQueue[fraud].get(fraud).writeToString());
+					bufferedWriter.write(fraudQueue.getTransaction().get(fraud).writeToString());
+				bufferedWriter.newLine();
 			}
-			fileOut.close();
 			return true;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 
@@ -239,22 +259,28 @@ public class MeritBank {
 	}
 
 	static BankAccount getBankAccount(long accountId) {//// Return null if account not
-		
-		
-		for(AccountHolder item: AHNewaccounts) {
-			for(int i = 0; i < item.getCheckingAccounts().length; i++) {
-				
-				if(accountId == AHNewaccounts[i].getCheckingAccounts().
+		for (AccountHolder item : AHNewaccounts) {
+			for (int i = 0; i < item.getCheckingAccounts().length; i++) {
+//				if(accountId == AHNewaccounts[i].getCheckingAccounts().
+//				if (accountId == getCheckingAccounts[i].getAccountNumber)
+				if (accountId == item.getCheckingAccounts()[i].getAccountNumber()) {
+					return item.getCheckingAccounts()[i];
+				}
 			}
-			
+			for (int j = 0; j < item.getSavingsAccounts().length; j++) {
+				if (accountId == item.getSavingsAccounts()[j].getAccountNumber()) {
+					return item.getSavingsAccounts()[j];
+				}
+			}
+			for (int k = 0; k < item.getCDAccounts().length; k++) {
+				if (accountId == item.getCDAccounts()[k].getAccountNumber()) {
+					return item.getCDAccounts()[k];
+				}
+			}
 		}
-			
-			
-			
 		return null;
-		
-	
-	
+	}
+
 	public static double recursiveFutureValue(double amount, int years, double interestRate) {
 		double newAmount = 0;
 		if (years > 0) {
@@ -283,33 +309,45 @@ public class MeritBank {
 				throw new ExceedsAvailableBalanceException("Insufficient Funds");
 			}
 			if (transaction.getAmount() > 1000) {
-				throw new ExceedsFraudSuspicionLimitException("Transactions over $1,000 must be reviewed");
 				fraudQueue.addTransaction(transaction);
+				throw new ExceedsFraudSuspicionLimitException("Transactions over $1,000 must be reviewed");
 			}
-
+			return true;
 		}
 //WITHDRAW AND/OR DEPOSIT
 		if (currentSourceAccount == null) {// if null, this is either withdraw or deposit
 
-			if (transaction.getAmount() <= 0) {
-				throw new NegativeAmountException("Amount cannot negative amount.");
-			}
+			if (transaction instanceof DepositTransaction) {
+				if (transaction.getAmount() <= 0) {
+					throw new NegativeAmountException("Amount cannot negative amount.");
+				}
 
-			if (transaction.getAmount() > 1000) {
-				throw new ExceedsFraudSuspicionLimitException("Transactions over $1,000 must be reviewed");
-				fraudQueue.addTransaction(transaction);
+				if (transaction.getAmount() > 1000) {
+					fraudQueue.addTransaction(transaction);
+					throw new ExceedsFraudSuspicionLimitException("Transactions over $1,000 must be reviewed");
+				}
+				return true;
+
 			}
-			if (currentSourceAccount == null) {// if null, this is either withdraw or deposit
+			if (transaction instanceof WithdrawTransaction) {
+				if (transaction.getAmount() <= 0) {
+					throw new NegativeAmountException("Amount cannot negative amount.");
+				}
+
+				if (transaction.getAmount() > 1000) {
+					fraudQueue.addTransaction(transaction);
+					throw new ExceedsFraudSuspicionLimitException("Transactions over $1,000 must be reviewed");
+				}
 				if (transaction.getAmount() > currentTargetAccount.getBalance()) {
 					throw new ExceedsAvailableBalanceException("Insufficient Funds");
 				}
 			}
 		}
-		return true;
+		return false;
+
 	}
 
-	public static FraudQueue getFraudQueue() { //
-
+	public static FraudQueue getFraudQueue() {
 		return fraudQueue;
 	}
 
