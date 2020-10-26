@@ -116,44 +116,59 @@ public class MeritBank {
 		return futureValueM;
 	}
 
-	static boolean readFromFile(String fileName) throws FileNotFoundException, ExceedsCombinedBalanceLimitException,
-			NegativeAmountException, ExceedsFraudSuspicionLimitException, ExceedsAvailableBalanceException {
-
-		CDOffering offering[] = new CDOffering[0];
+	public static boolean readFromFile(String fileName)  {
+		CDoff = new CDOffering[0];
+		setNextAccountNumber(0);
+		AHNewaccounts = new AccountHolder[0];
+		fraudQueue = new FraudQueue();
 //		Map<String, ArrayList> transactionHashMap = new HashMap<String, ArrayList>();
 		Set<String> transactions = new HashSet<String>();
-		fraudQueue = new FraudQueue();
-
-		try {
-			FileReader file = new FileReader(fileName);
-			BufferedReader bufferedReader = new BufferedReader(file);
-			Long nextAccountNumber = Long.valueOf(bufferedReader.readLine());
+		
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))){
+		
+			setNextAccountNumber(Long.valueOf(bufferedReader.readLine()));
 			int offeringNumber = Integer.valueOf(bufferedReader.readLine());
 			for (int i = 0; i < offeringNumber; i++) {
-				offering = Arrays.copyOf(offering, offering.length + 1);
-				offering[offering.length - 1] = CDOffering.readFromString(bufferedReader.readLine());
+				CDoff = Arrays.copyOf(CDoff, CDoff.length + 1);
+				CDoff[CDoff.length - 1] = CDOffering.readFromString(bufferedReader.readLine());
 			}
 			int accountHolderNumber = Integer.valueOf(bufferedReader.readLine());
-			AccountHolder[] newAccountHoldersArr = new AccountHolder[accountHolderNumber];
+			
+//			AccountHolder[] newAccountHoldersArr = new AccountHolder[accountHolderNumber];
 			for (int a = 0; a < accountHolderNumber; a++) {
 				AccountHolder accHolder = AccountHolder.readFromString(bufferedReader.readLine());
+				MeritBank.addAccountHolder(accHolder);
 				int checkingAccNum = Integer.valueOf(bufferedReader.readLine());
 				for (int b = 0; b < checkingAccNum; b++) {
 					accHolder.addCheckingAccount(CheckingAccount.readFromString(bufferedReader.readLine()));
-
+					int numbCheckTransactions = Integer.valueOf(bufferedReader.readLine());
+					for (int checkingTransaction=0; checkingTransaction< numbCheckTransactions; checkingTransaction++) {
+							transactions.add(bufferedReader.readLine());
 				}
+			}
 				int savingAccNum = Integer.valueOf(bufferedReader.readLine());
 				for (int c = 0; c < savingAccNum; c++) {
 					accHolder.addSavingsAccount(SavingsAccount.readFromString(bufferedReader.readLine()));
+					int numbSavTrans = Integer.valueOf(bufferedReader.readLine());
+					for (int savingsTran=0; savingsTran < numbSavTrans; savingsTran++ ) {
+					transactions.add(bufferedReader.readLine());
 				}
-				int cdAccNum = Integer.valueOf(bufferedReader.readLine());
-				for (int x = 0; x < cdAccNum; x++) {
+		}
+					
+	
+					
+					int cdAccNum = Integer.valueOf(bufferedReader.readLine());
+				for (int d = 0; d < cdAccNum; d++) {
 					accHolder.addCDAccount(CDAccount.readFromString(bufferedReader.readLine()));
+					int cdAccTran = Integer.valueOf(bufferedReader.readLine());
+					for (int cdTran=0; cdTran< cdAccTran; cdTran++) {
+						transactions.add(bufferedReader.readLine());
+					}
 				}
-				newAccountHoldersArr[a] = accHolder;
-
+			}
+	
 				int fraudQueueAlerts = Integer.valueOf(bufferedReader.readLine());
-				for (int x = 0; x < fraudQueueAlerts; x++) {
+				for (int e = 0; e < fraudQueueAlerts; e++) {
 					fraudQueue.addTransaction(Transaction.readFromString(bufferedReader.readLine()));
 				}
 				for (String transaction : transactions) {
@@ -166,27 +181,28 @@ public class MeritBank {
 					}
 				}
 				return true;
+			}catch(Exception ex) {
+				return false;
 			}
-			setNextAccountNumber(nextAccountNumber);
-			CDoff = offering;
-			AHNewaccounts = newAccountHoldersArr;
-			file.close();
-			return true;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return false;
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-			return false;
-		}
-
-	}
+			}
+//			
+//			file.close();
+//			return true;
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//			return false;
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			return false;
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//			return false;
+//		} catch (NumberFormatException e) {
+//			e.printStackTrace();
+//			return false;
+//		}
+//
+//	}
 
 	static boolean writeToFile(String fileName) {
 		try {
