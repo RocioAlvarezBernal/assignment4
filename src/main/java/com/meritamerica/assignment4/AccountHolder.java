@@ -8,7 +8,6 @@ package com.meritamerica.assignment4;
 
 public class AccountHolder implements Comparable<AccountHolder> {
 	private static final double MAX_BALANCE = 250000;
-
 	String firstName;
 	String middleName;
 	String lastName;
@@ -221,7 +220,7 @@ public class AccountHolder implements Comparable<AccountHolder> {
 	}
 
 	public CDAccount addCDAccount(CDOffering offering, double openBalance)
-			throws ExceedsCombinedBalanceLimitException, NegativeAmountException, ExceedsFraudSuspicionLimitException {
+			throws  NegativeAmountException, ExceedsFraudSuspicionLimitException {
 		CDAccount newAccount = new CDAccount(offering, openBalance);
 		DepositTransaction deposit = new DepositTransaction(newAccount, openBalance);
 		if (offering == null) {
@@ -249,7 +248,7 @@ public class AccountHolder implements Comparable<AccountHolder> {
 	}
 
 	public CDAccount addCDAccount(CDAccount cdAccount)
-			throws ExceedsCombinedBalanceLimitException, NegativeAmountException, ExceedsFraudSuspicionLimitException {
+			throws NegativeAmountException, ExceedsFraudSuspicionLimitException {
 		CDAccount[] testcd = new CDAccount[addedCDAccounts.length + 1];
 
 		DepositTransaction deposit = new DepositTransaction(cdAccount, cdAccount.getBalance());
