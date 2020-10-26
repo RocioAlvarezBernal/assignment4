@@ -162,22 +162,23 @@ public class AccountHolder implements Comparable<AccountHolder> {
 
 		} catch (ExceedsFraudSuspicionLimitException ex) {
 			throw new ExceedsFraudSuspicionLimitException("Sent to fraud team for review.");
-		} catch (ExceedsAvailableBalanceException e) {
+		} catch (ExceedsAvailableBalanceException ex) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ex.printStackTrace();
 		}
 
-		for (int i = 0; i < openingSavingsAccount.length - 1; i++) {
+		for (int i = 0; i < addedsavingsAccounts.length - 1; i++) {
 			openingSavingsAccount[i] = addedsavingsAccounts[i];
 		}
 		addedsavingsAccounts = openingSavingsAccount;
-		addedsavingsAccounts[addedsavingsAccounts.length - 1] = newAccount;
+		openingSavingsAccount[openingSavingsAccount.length - 1] = newAccount;
+		
 		return newAccount;
 	}
 
 	public SavingsAccount addSavingsAccount(SavingsAccount savingsAccount)
 			throws ExceedsCombinedBalanceLimitException, NegativeAmountException, ExceedsFraudSuspicionLimitException {
-		if (savingsAccount.getBalance() + getCheckingBalance() + getSavingsBalance() >= 250000) {
+		if (savingsAccount.getBalance() + getCheckingBalance() + getSavingsBalance() >= MAX_BALANCE) {
 //			System.out.println("Cannot open a new Savings Account because aggregate balance of accounts is to high.");
 			throw new ExceedsCombinedBalanceLimitException("Combined balance exceeds $250,000");
 		}
@@ -193,9 +194,9 @@ public class AccountHolder implements Comparable<AccountHolder> {
 
 		} catch (ExceedsFraudSuspicionLimitException ex) {
 			throw new ExceedsFraudSuspicionLimitException("Sent to fraud team for review.");
-		} catch (ExceedsAvailableBalanceException e) {
+		} catch (ExceedsAvailableBalanceException ex) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ex.printStackTrace();
 		}
 		for (int i = 0; i < depositSavingsAccount.length - 1; i++) {
 
@@ -233,9 +234,9 @@ public class AccountHolder implements Comparable<AccountHolder> {
 
 		} catch (ExceedsFraudSuspicionLimitException ex) {
 			throw new ExceedsFraudSuspicionLimitException("Sent to fraud team for review.");
-		} catch (ExceedsAvailableBalanceException e) {
+		} catch (ExceedsAvailableBalanceException ex) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ex.printStackTrace();
 		}
 
 		CDAccount[] testcd = new CDAccount[addedCDAccounts.length + 1];
