@@ -22,7 +22,7 @@ public class CDOffering {
 		return this.interestRate;
 	}
 
-	static CDOffering readFromString(String cdOfferingDataString) {
+	public static CDOffering readFromString(String cdOfferingDataString){
 //		int testI = 0;
 		String[] testName = cdOfferingDataString.split(",");
 		int term = Integer.parseInt(testName[0]);

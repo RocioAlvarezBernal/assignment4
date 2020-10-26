@@ -36,6 +36,10 @@ public abstract class BankAccount {
 		this(balance, interestRate, accountOpenedOn);
 		this.accountNumber = accountNumber;
 	}
+	
+	public BankAccount( double balance){
+		this.balance=balance;
+	}
 	   
 
 	public java.util.Date getOpenedOn() {

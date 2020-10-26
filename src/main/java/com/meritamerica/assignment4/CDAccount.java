@@ -69,21 +69,21 @@ public class CDAccount extends BankAccount {
     public boolean deposit(double amount) {
     	return false;
     }
-	
-	
 
 //same as Bank account with different of term included therefore on stringOverRide we append the term as well 
 	public static CDAccount readFromString(String accountData) throws ParseException, NumberFormatException {
 //		int testI = 0;
+		
 		String[] testName = accountData.split(",");
 		SimpleDateFormat daate = new SimpleDateFormat("dd/MM/yyyy");
+//		
 		long accountNumber = Long.parseLong(testName[0]);
     	double balance = Double.parseDouble(testName[1]);
     	double interestRate = Double.parseDouble(testName[2]);
     	Date accountOpenedOn = daate.parse(testName[3]);
     	int term = Integer.parseInt(testName[4]);
 //    	CDAccount newCDAccount = new CDAccount(interestRate,accountOpenedOn,term);
-    	CDAccount newCDAccount= new CDAccount(accountNumber,balance,interestRate,accountOpenedOn,term /* offering */);
+    	CDAccount newCDAccount= new CDAccount(accountNumber,balance,interestRate,accountOpenedOn,term);
     	return newCDAccount;
     }
 	
