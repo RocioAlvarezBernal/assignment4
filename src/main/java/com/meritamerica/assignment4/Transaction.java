@@ -15,16 +15,16 @@ public abstract class Transaction {
 
 //================ TRANSACTION CONSTRUCTORS =============================	
 	Transaction(BankAccount sourceAccount, BankAccount targetAccount, double amount) {
-//		this.sourceAccount = sourceAccount;
+		this.sourceAccount = sourceAccount;
 		this.targetAccount = targetAccount;
 		this.amount = amount;
-//		this.transactionDate = t ransactionDate;
+		this.transactionDate = new Date();
 	}
 
 	Transaction(BankAccount targetAccount, double amount) {
 		this.targetAccount = targetAccount;
 		this.amount = amount;
-//		this.transactionDate = transactionDate;
+		this.transactionDate = new Date();
 	}
 
 //========== GETTERS/SETTERS===================
@@ -125,15 +125,6 @@ public abstract class Transaction {
 		}
 		return null;
 	}
-	
-	
-	
-	
+//	 public abstract void process() throws NegativeAmountException;
 }
 
-// public abstract void process() throws NegativeAmountException,
-// ExceedsAvailableBalanceException, ExceedsFraudSuspicionLimitException
-// public boolean isProcessedByFraudTeam()
-// public void setProcessedByFraudTeam(boolean isProcessed)
-// public String getRejectionReason()
-// public void setRejectionReason(String reason)
