@@ -327,7 +327,7 @@ public class MeritBank {
 		BankAccount currentTargetAccount = transaction.getTargetAccount();
 
 		if (!(currentSourceAccount == null)) { // if there is a current sourceAccount, this transaction is a transfer
-			if (transaction.getAmount() <= 0 && transaction.getAmount() < 1000) {
+			if (transaction.getAmount() < 0 && transaction.getAmount() < 1000) {
 				throw new NegativeAmountException("Cannot transfer negative amount.");
 			}
 			if (transaction.getAmount() > currentSourceAccount.getBalance()) {
@@ -336,14 +336,15 @@ public class MeritBank {
 			if (transaction.getAmount() > 1000) {
 				fraudQueue.addTransaction(transaction);
 				throw new ExceedsFraudSuspicionLimitException("Transactions over $1,000 must be reviewed");
-			}
+				
+			} 
 			return true;
 		}
 //WITHDRAW AND/OR DEPOSIT
 		if (currentSourceAccount == null) {// if null, this is either withdraw or deposit
 
 			if (transaction instanceof DepositTransaction) {
-				if (transaction.getAmount() <= 0) {
+				if (transaction.getAmount() < 0) {
 					throw new NegativeAmountException("Amount cannot negative amount.");
 				}
 
@@ -355,7 +356,7 @@ public class MeritBank {
 
 			}
 			if (transaction instanceof WithdrawTransaction) {
-				if (transaction.getAmount() <= 0) {
+				if (transaction.getAmount() < 0) {
 					throw new NegativeAmountException("Amount cannot negative amount.");
 				}
 
