@@ -221,7 +221,7 @@ public class AccountHolder implements Comparable<AccountHolder> {
 	}
 
 	public CDAccount addCDAccount(CDOffering offering, double openBalance)
-			throws ExceedsCombinedBalanceLimitException, NegativeAmountException, ExceedsFraudSuspicionLimitException {
+			throws NegativeAmountException, ExceedsFraudSuspicionLimitException {
 		CDAccount newAccount = new CDAccount(offering, openBalance);
 		DepositTransaction deposit = new DepositTransaction(newAccount, openBalance);
 		if (offering == null) {

@@ -73,7 +73,7 @@ public class CDAccount extends BankAccount {
 //same as Bank account with different of term included therefore on stringOverRide we append the term as well 
 	public static CDAccount readFromString(String accountData) throws ParseException, NumberFormatException {
 //		int testI = 0;
-		
+		System.out.print(accountData);
 		String[] testName = accountData.split(",");
 		SimpleDateFormat daate = new SimpleDateFormat("dd/MM/yyyy");
 //		
