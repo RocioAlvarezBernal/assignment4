@@ -63,9 +63,9 @@ public class MeritBank {
 			return null;
 		}
 		for (CDOffering offering : CDoff) {
-			if (recursiveFutureValue(depositAmount, offering.getInterestRate(), offering.getTerm()) > best) {
+			if (futureValue(depositAmount, offering.getInterestRate(), offering.getTerm()) > best) {
 				bestOffering = offering;
-				best = recursiveFutureValue(depositAmount, offering.getInterestRate(), offering.getTerm());
+				best = futureValue(depositAmount, offering.getInterestRate(), offering.getTerm());
 			}
 		}
 		return bestOffering;
@@ -80,10 +80,10 @@ public class MeritBank {
 		CDOffering secondBestOffering = null;
 
 		for (CDOffering offering : CDoff) {
-			if (recursiveFutureValue(depositAmount, offering.getInterestRate(), offering.getTerm()) > best) {
+			if (futureValue(depositAmount, offering.getInterestRate(), offering.getTerm()) > best) {
 				secondBestOffering = bestOffering;
 				bestOffering = offering;
-				best = recursiveFutureValue(depositAmount, offering.getInterestRate(), offering.getTerm());
+				best = futureValue(depositAmount, offering.getInterestRate(), offering.getTerm());
 			}
 		}
 		return secondBestOffering;
@@ -108,6 +108,12 @@ public class MeritBank {
 		}
 		return total;
 
+	}
+
+	public static double futureValue(double presentValue, double interestRate, int term) {
+		// expression is located in bankAcount and will call from there
+		double futureValueM = presentValue * Math.pow(1 + interestRate, term);
+		return futureValueM;
 	}
 
 	public static boolean readFromFile(String fileName) {
@@ -177,6 +183,24 @@ public class MeritBank {
 			return false;
 		}
 	}
+			
+//			file.close();
+//			return true;
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//			return false;
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			return false;
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//			return false;
+//		} catch (NumberFormatException e) {
+//			e.printStackTrace();
+//			return false;
+//		}
+//
+//	}
 
 	static boolean writeToFile(String fileName) {
 		try {
@@ -271,20 +295,31 @@ public class MeritBank {
 		return null;
 	}
 
+//	public static double recursiveFutureValue(double amount, int years, double interestRate) {
+//		double newAmount = 0;
+//		if (years > 0) {
+//			for (int i = 1; i <= years; i++) {
+//				newAmount = amount * interestRate;
+//				years--;
+//				recursiveFutureValue(amount*( 1+interestRate), years - 1, interestRate);
+//			}
+//			return newAmount;
+//		} else {
+//			return amount;
+//
+//		}
+//	}
+	
+	
 	public static double recursiveFutureValue(double amount, int years, double interestRate) {
-		double newAmount = 0;
-		if (years > 0) {
-			for (int i = 1; i <= years; i++) {
-				newAmount = amount * interestRate;
-				years--;
-				recursiveFutureValue(newAmount, years, interestRate);
-			}
-			return newAmount;
-		} else {
-			return amount;
-
-		}
-	}
+        if (years <= 0) {
+              return amount;
+        }else{
+            return recursiveFutureValue(amount*( 1+interestRate), years - 1, interestRate);
+            }
+    }
+        
+        
 
 	public static boolean processTransaction(Transaction transaction)
 			throws NegativeAmountException, ExceedsAvailableBalanceException, ExceedsFraudSuspicionLimitException {
@@ -292,7 +327,7 @@ public class MeritBank {
 		BankAccount currentTargetAccount = transaction.getTargetAccount();
 
 		if (!(currentSourceAccount == null)) { // if there is a current sourceAccount, this transaction is a transfer
-			if (transaction.getAmount() <= 0 && transaction.getAmount() < 1000) {
+			if (transaction.getAmount() < 0 && transaction.getAmount() < 1000) {
 				throw new NegativeAmountException("Cannot transfer negative amount.");
 			}
 			if (transaction.getAmount() > currentSourceAccount.getBalance()) {
@@ -301,14 +336,15 @@ public class MeritBank {
 			if (transaction.getAmount() > 1000) {
 				fraudQueue.addTransaction(transaction);
 				throw new ExceedsFraudSuspicionLimitException("Transactions over $1,000 must be reviewed");
-			}
+				
+			} 
 			return true;
 		}
 //WITHDRAW AND/OR DEPOSIT
 		if (currentSourceAccount == null) {// if null, this is either withdraw or deposit
 
 			if (transaction instanceof DepositTransaction) {
-				if (transaction.getAmount() <= 0) {
+				if (transaction.getAmount() < 0) {
 					throw new NegativeAmountException("Amount cannot negative amount.");
 				}
 
@@ -320,7 +356,7 @@ public class MeritBank {
 
 			}
 			if (transaction instanceof WithdrawTransaction) {
-				if (transaction.getAmount() <= 0) {
+				if (transaction.getAmount() < 0) {
 					throw new NegativeAmountException("Amount cannot negative amount.");
 				}
 
