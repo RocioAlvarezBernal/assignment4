@@ -22,11 +22,11 @@ public class SavingsAccount extends BankAccount {
 	}
 
 	SavingsAccount(long accountNumber, double openingBalance, double interest, Date accountOpenedOn) {
-		super(accountNumber, interest, openingBalance, accountOpenedOn);
+		super(accountNumber, openingBalance, interest, accountOpenedOn);
 	}
 
 	SavingsAccount(double openingBalance) {
-		super(openingBalance);
+		super(openingBalance, SavingsAccount.interest);
 	}
 
 	public boolean withdraw(double amount) {
