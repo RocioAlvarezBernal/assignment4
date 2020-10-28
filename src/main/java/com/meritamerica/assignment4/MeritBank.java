@@ -13,7 +13,7 @@
 //Should also read BankAccount transactions and the FraudQueue
 //static boolean writeToFile(String fileName)
 //Should also write BankAccount transactions and the FraudQueue
-
+//
 package com.meritamerica.assignment4;
 
 import java.io.BufferedReader;
